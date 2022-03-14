@@ -17,6 +17,14 @@ describe("asleepMins", () => {
     ];
     expect(asleepMins(input)).toHaveLength(7);
   });
+  it('return an array of one when guard nods off at 59', () => {
+    const input = [
+      ["1518-11-23T00:00:15.000Z", 1097],
+      ["1518-11-23T00:59:15.000Z", "falls asleep"],
+    ];
+    expect(asleepMins(input)).toHaveLength(1);
+    expect(asleepMins(input)).toEqual([59])
+  });
   it("returns the correct minutes when the guard wakes again", () => {
     const input = [
       ["1518-11-23T00:00:15.000Z", 1097],
@@ -24,6 +32,16 @@ describe("asleepMins", () => {
       ["1518-11-23T00:31:15.000Z", "wakes up"],
     ];
     expect(asleepMins(input)).toHaveLength(18);
+    expect(asleepMins(input)).toEqual([13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30])
+  });
+  it('works for zero', () => {
+    const input = [
+      ["1518-11-23T23:59:15.000Z", 1097],
+      ["1518-11-23T00:00:15.000Z", "falls asleep"],
+      ["1518-11-23T00:01:15.000Z", "wakes up"],
+    ];
+    expect(asleepMins(input)).toHaveLength(1);
+    expect(asleepMins(input)).toEqual([0])
   });
   it("works for a longer array", () => {
     const input = [

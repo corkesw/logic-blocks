@@ -1,20 +1,20 @@
 const { formattedData } = require("./data");
-const { createRef, asleepMins, mapSleepMins } = require("./util");
+
+const {
+  createRef,
+  asleepMins,
+  mapSleepMins,
+  makeDataBlocks,
+} = require("./util");
 
 const { guardList, startIndices, guards } = createRef(formattedData);
 
-console.log(guardList, startIndices, guards);
+const dataBlocks = makeDataBlocks(formattedData, startIndices);
 
-startIndices.forEach((start, index) => {
-  // for each list of data, set the start and end indices and create arrays of each block
-  let end = startIndices[index + 1] - 1;
-  if (isNaN(end)) end = formattedData.length - 1;
-  const currentData = formattedData.slice(start, end + 1);
-  const guard = currentData[0][1];
-
-  // for each block of time, push the asleep mins to that guards key
-  const asleepTime = asleepMins(currentData);
-
+dataBlocks.forEach((block) => {
+  // work out asleep time for each block and push to that guards sleep array
+  const asleepTime = asleepMins(block);
+  const guard = block[0][1];
   asleepTime.forEach((time) => {
     guardList[guard].push(time);
   });

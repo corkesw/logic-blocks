@@ -23,6 +23,7 @@ exports.formatData = (path) => {
 };
 
 exports.createRef = (data) => {
+
   const guardList = {}; // keys of unique guard ids with array values
   const startIndices = []; // array of indices where each time data begins
   data.forEach((datum, index) => {
@@ -39,42 +40,48 @@ exports.createRef = (data) => {
 
 exports.asleepMins = (data) => {
   if (data.length < 2) return [];
-  let asleepArray = [];
-
-  const date = new Date(data[1][0]);
-
-  let startMin;
+  const asleepArray = [];
   let asleep = true;
-  if (date.getHours() === 23) startMin = 0;
-  else startMin = date.getMinutes();
-
-  data.forEach((_, index) => {
-    let endMin = 59;
-    index++;
-    if (data[index + 1]) {
-      endMin = new Date(data[index + 1][0]).getMinutes();
+  for (let i = 1; i < data.length; i++) {
+    const start = Number(data[i][0].slice(14, 16));
+    let end;
+    if (i < data.length - 1) {
+      end = Number(data[i + 1][0].slice(14, 16));
+    } else {
+      end = 60;
     }
-
     if (asleep) {
-      for (let i = startMin; i <= endMin; i++) {
-        asleepArray.push(i - 1);
+      for (let j = start; j < end; j++) {
+        asleepArray.push(j);
       }
     }
     asleep = !asleep;
-    startMin = endMin + 1;
-  });
+  }
   return asleepArray;
 };
 
+exports.makeDataBlocks = (data, startIndices) => {
+  const dataBlocks = [];
+  startIndices.forEach((start, index) => {
+    // for each list of data, set the start and end indices and create arrays of each block
+    let end = startIndices[index + 1];
+    if (isNaN(end)) end = data.length - 1;
+    const currentData = data.slice(start, end);
+    dataBlocks.push(currentData);
+  });
+  return dataBlocks;
+};
+
 exports.mapSleepMins = (guardList) => {
-  console.log(guardList);
   const sleepyMins = {};
   for (const key in guardList) {
-    sleepyMins[key] = guardList[key].sort(
-      (a, b) =>
-        guardList[key].filter((v) => v === a).length -
-        guardList[key].filter((v) => v === b).length
-    ).pop()
+    sleepyMins[key] = guardList[key]
+      .sort(
+        (a, b) =>
+          guardList[key].filter((v) => v === a).length -
+          guardList[key].filter((v) => v === b).length
+      )
+      .pop();
   }
   return sleepyMins;
 };
