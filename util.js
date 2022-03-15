@@ -1,5 +1,4 @@
 exports.createRef = (data) => {
-
   const guardList = {}; // keys of unique guard ids with array values
   const startIndices = []; // array of indices where each time data begins
   data.forEach((datum, index) => {
@@ -15,7 +14,6 @@ exports.createRef = (data) => {
 };
 
 exports.asleepMins = (data) => {
-  
   const asleepArray = [];
   // from index 1, guard is asleep
   let asleep = true;
@@ -24,7 +22,7 @@ exports.asleepMins = (data) => {
     const start = Number(data[i][0].slice(14, 16));
     let end;
     if (i < data.length - 1) {
-      end = Number(data[i + 1][0].slice(14, 16) -1);
+      end = Number(data[i + 1][0].slice(14, 16) - 1);
     } else {
       end = 59;
     }
@@ -63,4 +61,14 @@ exports.mapSleepMins = (guardList) => {
       .pop();
   }
   return sleepyMins;
+};
+
+exports.numberOfTimesSleepyMins = (guardList, sleepyMins) => {
+  const sleepyTimes = {};
+  for (const key in guardList) {
+    sleepyTimes[key] = guardList[key].filter(
+      (num) => num === sleepyMins[key]
+    ).length;
+  }
+  return sleepyTimes;
 };

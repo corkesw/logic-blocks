@@ -5,6 +5,7 @@ const {
   asleepMins,
   mapSleepMins,
   makeDataBlocks,
+  numberOfTimesSleepyMins,
 } = require("./util");
 
 const { guardList, startIndices, guards } = createRef(formattedData);
@@ -50,3 +51,7 @@ console.log(sleepiestGuard * sleepiestMinute);
 const guardsSleepyMins = mapSleepMins(guardList);
 
 console.log(guardsSleepyMins);
+
+const sleepiestMinCount = numberOfTimesSleepyMins(guardList, guardsSleepyMins)
+
+console.log(sleepiestMinCount)

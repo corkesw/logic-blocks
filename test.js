@@ -1,4 +1,4 @@
-const { asleepMins, mapSleepMins } = require("./util");
+const { asleepMins, mapSleepMins, numberOfTimesSleepyMins } = require("./util");
 
 describe("asleepMins", () => {
   it("returns an empty array when passed an empty array", () => {
@@ -81,5 +81,13 @@ describe("mapSleepMin", () => {
   it("works more", () => {
     const guardList = { 111: [1, 2, 3, 3, 3], 222: [3, 4, 5, 6, 4] };
     expect(mapSleepMins(guardList)).toEqual({ 111: 3, 222: 4 });
+  });
+});
+
+describe("numberOfTimesSleepyMins", () => {
+  it("should return the number of times the sleepiest min was slept", () => {
+    const guardList = { 111: [1, 2, 3, 3, 3] };
+    const sleepyMins = { 111: 3 };
+    expect(numberOfTimesSleepyMins(guardList, sleepyMins)).toEqual({ 111: 3 });
   });
 });
