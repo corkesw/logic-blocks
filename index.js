@@ -20,6 +20,7 @@ dataBlocks.forEach((block) => {
   });
 });
 
+
 const totalSleepyMins = guards
   .map((guard) => {
     return [guard, guardList[guard].length];

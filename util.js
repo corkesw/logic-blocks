@@ -1,27 +1,3 @@
-const { readFile } = require("fs/promises");
-
-exports.formatData = (path) => {
-  return readFile(path, "utf8").then((res) => {
-    return res
-      .split("\n")
-      .map((item) => {
-        // format data into array with date[0] and comment[1]
-        return [new Date(item.slice(1, 17)), item.slice(19)];
-      })
-      .sort((itemA, itemB) => {
-        // sort array in ascending date order
-        return itemA[0] - itemB[0];
-      })
-      .map((item) => {
-        // format comment to just the guard number where guard comes on shift
-        if (item[1][6] === "#") {
-          const guardNum = item[1].split(" ")[1].slice(1);
-          return [item[0], Number(guardNum)];
-        } else return item;
-      });
-  });
-};
-
 exports.createRef = (data) => {
 
   const guardList = {}; // keys of unique guard ids with array values
@@ -39,19 +15,22 @@ exports.createRef = (data) => {
 };
 
 exports.asleepMins = (data) => {
-  if (data.length < 2) return [];
+  
   const asleepArray = [];
+  // from index 1, guard is asleep
   let asleep = true;
   for (let i = 1; i < data.length; i++) {
+    // set start and end of this block of time
     const start = Number(data[i][0].slice(14, 16));
     let end;
     if (i < data.length - 1) {
-      end = Number(data[i + 1][0].slice(14, 16));
+      end = Number(data[i + 1][0].slice(14, 16) -1);
     } else {
-      end = 60;
+      end = 59;
     }
     if (asleep) {
-      for (let j = start; j < end; j++) {
+      // if guard is asleep, push the minutes to the array
+      for (let j = start; j <= end; j++) {
         asleepArray.push(j);
       }
     }

@@ -7,11 +7,11 @@ formatData = (path) => {
       .split("\n")
       .map((item) => {
         // format data into array with date[0] and comment[1]
-        return [new Date(item.slice(1, 17)), item.slice(19)];
+        return [item.slice(1, 17), item.slice(19)];
       })
       .sort((itemA, itemB) => {
         // sort array in ascending date order
-        return itemA[0] - itemB[0];
+        return new Date(itemA[0]) - new Date (itemB[0]);
       })
       .map((item) => {
         // format comment to just the guard number where guard comes on shift

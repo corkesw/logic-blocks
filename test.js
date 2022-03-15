@@ -17,13 +17,13 @@ describe("asleepMins", () => {
     ];
     expect(asleepMins(input)).toHaveLength(7);
   });
-  it('return an array of one when guard nods off at 59', () => {
+  it("return an array of one when guard nods off at 59", () => {
     const input = [
       ["1518-11-23T00:00:15.000Z", 1097],
       ["1518-11-23T00:59:15.000Z", "falls asleep"],
     ];
     expect(asleepMins(input)).toHaveLength(1);
-    expect(asleepMins(input)).toEqual([59])
+    expect(asleepMins(input)).toEqual([59]);
   });
   it("returns the correct minutes when the guard wakes again", () => {
     const input = [
@@ -32,16 +32,18 @@ describe("asleepMins", () => {
       ["1518-11-23T00:31:15.000Z", "wakes up"],
     ];
     expect(asleepMins(input)).toHaveLength(18);
-    expect(asleepMins(input)).toEqual([13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30])
+    expect(asleepMins(input)).toEqual([
+      13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
+    ]);
   });
-  it('works for zero', () => {
+  it("works for zero", () => {
     const input = [
-      ["1518-11-23T23:59:15.000Z", 1097],
-      ["1518-11-23T00:00:15.000Z", "falls asleep"],
-      ["1518-11-23T00:01:15.000Z", "wakes up"],
+      ["1518-11-23 23:59", 1097],
+      ["1518-11-23 00:00", "falls asleep"],
+      ["1518-11-23 00:01", "wakes up"],
     ];
     expect(asleepMins(input)).toHaveLength(1);
-    expect(asleepMins(input)).toEqual([0])
+    expect(asleepMins(input)).toEqual([0]);
   });
   it("works for a longer array", () => {
     const input = [
@@ -68,5 +70,16 @@ describe("mapSleepMins", () => {
       287: [1, 2, 3, 4, 4, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6],
     };
     expect(mapSleepMins(input)).toEqual({ 2887: 5, 287: 6 });
+  });
+});
+
+describe("mapSleepMin", () => {
+  it("works", () => {
+    const guardList = { 111: [1, 2, 3, 3, 3] };
+    expect(mapSleepMins(guardList)).toEqual({ 111: 3 });
+  });
+  it("works more", () => {
+    const guardList = { 111: [1, 2, 3, 3, 3], 222: [3, 4, 5, 6, 4] };
+    expect(mapSleepMins(guardList)).toEqual({ 111: 3, 222: 4 });
   });
 });
